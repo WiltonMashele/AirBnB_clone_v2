@@ -2,10 +2,8 @@
 """ City Module for HBNB project """
 from models.base_model import BaseModel, Base
 from models.state import State
-
 from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-
+from sqlalchemy.orm import relationship
 import os
 env_value = os.environ.get('HBNB_TYPE_STORAGE')
 
@@ -16,6 +14,7 @@ class City(BaseModel, Base):
     if env_value == 'db':
         name = Column(String(128), nullable=False)
         state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
+        places = relationship('Place', backref='cities')
     else:
         name = ""
         state_id = ""
