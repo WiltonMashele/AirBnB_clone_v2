@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+import re
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -130,13 +131,13 @@ class HBNBCommand(cmd.Cmd):
             new.pop(0)
             for param in new:
                 param = param.split("=")
-                if param[1][0] == '\"':
+                if re.search(r'^"(.*?)"$', param[1]):
                     param[1] = param[1][1:-1]
                     param[1] = param[1].replace("_", " ")
                     setattr(new_instance, param[0], str(param[1]))
-                elif '.' in param[1]:
+                elif re.search(r'^\d+\.\d+$', param[1]):
                     setattr(new_instance, param[0], float(param[1]))
-                else:
+                elif re.search(r'^\d+$', param[1]):
                     setattr(new_instance, param[0], int(param[1]))
 
     def help_create(self):
