@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -8,15 +8,14 @@ import os
 variable_name = 'HBNB_TYPE_STORAGE'
 env_value = os.environ.get(variable_name)
 
-Base = declarative_base()
-
 
 class State(BaseModel, Base):
     """ State class """
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
     if env_value == 'db':
-        cities = relationship('City', foreign_keys='City.state_id')
+        cities = relationship(
+                'City', backref='states', cascade='all, delete-orphan')
     else:
         cities = self.link()
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from sqlalchemy import (create_engine)
+from sqlalchemy.orm import scoped_session, sessionmaker
 import os
 
 
@@ -42,13 +43,12 @@ class DBStorage:
     def reload(self):
         from models.user import User
         from models.place import Place
-        from models.state import State, Base as BaseState
-        from models.city import City, Base as BaseCity
+        from models.state import State, Base
+        from models.city import City, Base
         from models.amenity import Amenity
         from models.review import Review
-        BaseState.metadata.create_all(self.__engine)
-        BaseCity.metadata.create_all(self.__engine)
+        Base.metadata.create_all(self.__engine)
 
-        Session = scoped_session(sessionmaker(
-            bind=engine, expire_on_commit=False))
-        session = Session()
+        Session = scoped_session(
+                sessionmaker(bind=self.__engine, expire_on_commit=False))
+        self.__session = Session()
