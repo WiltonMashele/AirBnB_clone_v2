@@ -8,6 +8,7 @@ from sqlalchemy.orm import relationship
 import os
 env_value = os.environ.get('HBNB_TYPE_STORAGE')
 
+
 class Review(BaseModel, Base):
     """ Review classto store review information """
     __tablename__ = 'reviews'
