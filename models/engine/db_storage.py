@@ -30,7 +30,7 @@ class DBStorage:
         from models.review import Review
 
         if cls is None:
-            cls = [State, City]
+            cls = [State, City, User]
             query = []
             for c in cls:
                 query += self.__session.query(c).all()
@@ -42,7 +42,6 @@ class DBStorage:
         return cls_objs
 
     def new(self, obj):
-        print('here')
         self.__session.add(obj)
 
     def save(self):
