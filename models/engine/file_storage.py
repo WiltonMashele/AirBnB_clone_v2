@@ -56,6 +56,7 @@ class FileStorage:
             pass
 
     def delete(self, obj=None):
+        """delete objs from relative class"""
         if obj:
             for key, value in FileStorage.__objects.items():
                 if obj == value:
