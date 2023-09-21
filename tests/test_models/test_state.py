@@ -1,21 +1,19 @@
 #!/usr/bin/python3
-""" """
+""" tests for class State """
 from tests.test_models.test_base_model import test_basemodel
 from models.state import State
 
-import os
-env_value = os.environ.get('HBNB_TYPE_STORAGE')
 
 class test_state(test_basemodel):
-    """ """
-    if env_value != 'db':
-        def __init__(self, *args, **kwargs):
-            """ """
-            super().__init__(*args, **kwargs)
-            self.name = "State"
-            self.value = State
+    """ tests for class State """
 
-        def test_name3(self):
-            """ """
-            new = self.value()
-            self.assertEqual(type(new.name), str)
+    def __init__(self, *args, **kwargs):
+        """ tests for class State """
+        super().__init__(*args, **kwargs)
+        self.name = "State"
+        self.value = State
+
+    def test_name3(self):
+        """ tests for class State """
+        new = self.value()
+        self.assertEqual(type(new.name), str)
