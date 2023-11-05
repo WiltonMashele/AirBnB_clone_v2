@@ -2,6 +2,7 @@
 """A script that starts a Flask web application"""
 from flask import Flask
 
+
 app = Flask(__name__)
 
 
@@ -25,8 +26,6 @@ def c_with_variable(text):
 
 
 @app.route('/python/', strict_slashes=False)
-
-
 @app.route('/python/<text>', strict_slashes=False)
 def python_with_variable(text='is cool'):
     """Return 'Python ' followed by the value of the text variable (replace underscore _ symbols with a space)"""
