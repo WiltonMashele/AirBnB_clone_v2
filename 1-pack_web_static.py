@@ -13,7 +13,7 @@ def do_pack():
         Path to the created archive if successful, None otherwise.
     """
     if not os.path.exists("versions"):
-        local("mkdir versions")    
+        local("mkdir versions")  
     now = datetime.now()
     timestamp = now.strftime("%Y%m%d%H%M%S")
     archive_name = "versions/web_static_{}.tgz".format(timestamp)
