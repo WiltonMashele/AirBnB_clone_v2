@@ -49,9 +49,11 @@ def with_number_send_webpage(n):
 def num_odd_even(n):
     """Displays an HTML page only if n is an integer"""
     if n % 2 == 0:
-        return render_template('6-number_odd_or_even.html', n=n, oddeven="even")
+        return render_template(
+                '6-number_odd_or_even.html', n=n, oddeven="even")
     else:
-        return render_template('6-number_odd_or_even.html', n=n, oddeven="odd")
+        return render_template(
+                '6-number_odd_or_even.html', n=n, oddeven="odd")
 
 
 if __name__ == "__main__":
