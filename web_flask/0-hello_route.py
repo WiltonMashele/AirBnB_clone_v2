@@ -5,7 +5,7 @@ from flask import Flask
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET'], strict_slashes=False)
 def hello_hbnb():
     """This function handles the root URL and returns a greeting."""
     return 'Hello, HBNB!'
