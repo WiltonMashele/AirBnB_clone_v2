@@ -1,35 +1,44 @@
 #!/usr/bin/python3
-"""Function to deploy a compressed folder"""
-from datetime import datetime
-from fabric.api import env, put, run
-import shlex
-import os
+"""
+Distribute an archive to web servers using Fabric.
+"""
+from fabric.api import env, put, run, sudo
+from os.path import isfile
 
-env.hosts = ['44.211.97.124', '34.228.52.136']
-env.user = "ubuntu"
+env.hosts = ['<IP web-01>', '<IP web-02>']
+env.user = '<username>'
+env.key_filename = '<SSH key path>'  # Replace with your SSH key path
 
-def deploy_folder(archive_path):
-    """Deploys a compressed folder"""
-    if not os.path.exists(archive_path):
+def do_deploy(archive_path):
+    """
+    Distribute an archive to web servers.
+
+    Args:
+        archive_path: Path to the archive file to deploy.
+
+    Returns:
+        True if successful, False otherwise.
+    """
+    if not isfile(archive_path):
         return False
 
-    try:
-        archive_basename = os.path.basename(archive_path)
-        archive_name = os.path.splitext(archive_basename)[0]
+    # Get the filename without extension
+    archive_filename = archive_path.split("/")[-1].split(".")[0]
 
-        releases_path = "/data/web_static/releases/{}".format(archive_name)
-        tmp_path = "/tmp/{}".format(archive_basename)
+    # Upload the archive to the /tmp/ directory of the web server
+    put(archive_path, "/tmp/")
 
-        put(archive_path, "/tmp/")
-        run("mkdir -p {}".format(releases_path))
-        run("tar -xzf {} -C {}".format(tmp_path, releases_path))
-        run("rm {}".format(tmp_path))
-        run("mv {}/web_static/* {}".format(releases_path, releases_path))
-        run("rm -rf {}/web_static".format(releases_path))
-        run("rm -rf /data/web_static/current")
-        run("ln -s {} /data/web_static/current".format(releases_path))
-        print("New version deployed!")
-        return True
-    except Exception as e:
-        print("Deployment failed:", str(e))
-        return False
+    # Uncompress the archive to the folder /data/web_static/releases/<archive_filename>
+    run("mkdir -p /data/web_static/releases/{}".format(archive_filename))
+    run("tar -xzf /tmp/{} -C /data/web_static/releases/{}/".format(archive_filename + ".tgz", archive_filename))
+
+    # Delete the archive from the web server
+    run("rm /tmp/{}".format(archive_filename + ".tgz"))
+
+    # Delete the symbolic link /data/web_static/current
+    run("rm /data/web_static/current")
+
+    # Create a new symbolic link /data/web_static/current linked to the new version
+    run("ln -s /data/web_static/releases/{} /data/web_static/current".format(archive_filename))
+
+    return True
